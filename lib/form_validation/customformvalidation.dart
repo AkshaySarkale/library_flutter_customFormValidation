@@ -31,6 +31,10 @@ class CustomFormWithValidation extends StatefulWidget {
 
   final double fieldSpacing;
 
+  final bool showGender;
+  final String genderLabel;
+  final ValueChanged<String?>? onGenderChanged;
+
   const CustomFormWithValidation({
     super.key,
     required this.pageTitle,
@@ -61,6 +65,10 @@ class CustomFormWithValidation extends StatefulWidget {
     this.confirmPasswordLabel = "Confirm Password",
 
     this.fieldSpacing = 12,
+
+    this.showGender = true,
+    this.genderLabel = "Gender",
+    this.onGenderChanged,
   });
 
   @override
@@ -69,6 +77,7 @@ class CustomFormWithValidation extends StatefulWidget {
 }
 
 class _CustomFormWithValidationState extends State<CustomFormWithValidation> {
+  String? selectedGender;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   void validateAndSubmit() {
@@ -141,6 +150,49 @@ class _CustomFormWithValidationState extends State<CustomFormWithValidation> {
                 SmartTextInput(
                   txtCtrl: widget.phoneNumberCtrl,
                   isMobNumber: true,
+                ),
+
+                SizedBox(height: widget.fieldSpacing),
+              ],
+              if (widget.showGender) ...[
+                Text(widget.genderLabel),
+
+                const SizedBox(height: 6),
+
+                DropdownButtonFormField<String>(
+                  value: selectedGender,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: "Male",
+                      child: Text("Male"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Female",
+                      child: Text("Female"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Other",
+                      child: Text("Other"),
+                    ),
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please select gender";
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      selectedGender = value;
+                    });
+
+                    widget.onGenderChanged?.call(value);
+                  },
                 ),
 
                 SizedBox(height: widget.fieldSpacing),
