@@ -68,10 +68,9 @@ class CustomFormWithValidation extends StatefulWidget {
       _CustomFormWithValidationState();
 }
 
-class _CustomFormWithValidationState
-    extends State<CustomFormWithValidation> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _CustomFormWithValidationState extends State<CustomFormWithValidation> {
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   void validateAndSubmit() {
     if (_formKey.currentState!.validate()) {
       widget.onSubmit?.call();
@@ -89,9 +88,7 @@ class _CustomFormWithValidationState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.pageTitle,
-                style: const TextStyle(
+              Text(widget.pageTitle, style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -107,15 +104,13 @@ class _CustomFormWithValidationState
                     ),
                   ),
                 ),
-
               const SizedBox(height: 20),
 
               if (widget.showFullName) ...[
                 Text(widget.fullNameLabel),
                 const SizedBox(height: 6),
 
-                SmartTextInput(
-                  txtCtrl: widget.fullNametxtCtrl,
+                SmartTextInput(txtCtrl: widget.fullNametxtCtrl,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return "Full Name is required";
