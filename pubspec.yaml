@@ -1,7 +1,7 @@
 name: library_flutter_form_validation
 description: "A new Flutter package project."
 version: 0.0.1
-homepage: https://github.com/AkshaySarkale/library_flutter_customFormValidation.git
+homepage: https://github.com/Excelsior-Technologies-Community/library_flutter_customFormValidation.git
 
 environment:
   sdk: ^3.12.0
