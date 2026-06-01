@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:library_flutter_smart_text_input/smarttextinput/smart_text_input.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class CustomFormWithValidation extends StatefulWidget {
   final String pageTitle;
   final String subTitle;
+
+  final bool showProfilePhoto;
+  final ValueChanged<File?>? onImageSelected;
 
   final TextEditingController fullNametxtCtrl;
   final TextEditingController emailtxtCtrl;
@@ -94,6 +99,9 @@ class CustomFormWithValidation extends StatefulWidget {
     this.titleStyle,
     this.subtitleStyle,
     this.labelStyle,
+
+    this.showProfilePhoto = false,
+    this.onImageSelected,
   });
 
   @override
@@ -101,8 +109,18 @@ class CustomFormWithValidation extends StatefulWidget {
       _CustomFormWithValidationState();
 }
 
-class _CustomFormWithValidationState
-    extends State<CustomFormWithValidation> {
+class _CustomFormWithValidationState extends State<CustomFormWithValidation> {
+  File? selectedImage;
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {  selectedImage = File(image.path);  });
+      widget.onImageSelected?.call(selectedImage);
+    }
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? selectedGender;
@@ -139,7 +157,6 @@ class _CustomFormWithValidationState
       );
       return;
     }
-
     widget.onFormData?.call({
       "fullName": widget.fullNametxtCtrl.text,
       "email": widget.emailtxtCtrl.text,
@@ -148,7 +165,6 @@ class _CustomFormWithValidationState
       "address": widget.addressCtrl?.text,
       "dob": widget.dobCtrl?.text,
     });
-
     widget.onSubmit?.call();
   }
 
@@ -181,6 +197,46 @@ class _CustomFormWithValidationState
                   ),
                 ),
               const SizedBox(height: 20),
+              if (widget.showProfilePhoto) ...[
+                Center(
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: selectedImage != null
+                            ? FileImage(selectedImage!)
+                            : null,
+                        child: selectedImage == null
+                            ? const Icon(
+                          Icons.person,
+                          size: 50,
+                        )
+                            : null,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: pickImage,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blue,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
 
               if (widget.showFullName) ...[
                 Text(widget.fullNameLabel, style: widget.labelStyle),
