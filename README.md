@@ -263,9 +263,7 @@ Users must accept the terms before form submission.
 
 ## Demo GIF
 
-```md
-![Demo](assets/demo.gif)
-```
+<img src="assets/demo.gif" width="300"/>
 
 ---
 
